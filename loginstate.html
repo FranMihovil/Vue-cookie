@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+    <h1 style="text-align: center;">{{text}}</h1>
+    <button style="text-align: center;" @click="logout">Log Out !</button>
+</div>
+</body>
+</html>
+
+
+<script>
+    var vueApp = new Vue({
+        el:"#app",
+        data:{
+            text:'',
+        },
+        mounted() {
+        var cookieValue = this.getCookie("token");
+        if (cookieValue) {
+            this.text = "Successfull!" 
+        } else {
+            this.text = "No cookie in storage, something went wrong..."
+            
+        }
+        },
+        methods: {
+            getCookie(name) {
+            // get all cookies as a string
+            var allCookies = document.cookie;
+            // check if the "token" cookie exists
+            if (allCookies.indexOf(name + "=") !== -1) {
+            // get the value of the "token" cookie
+            var cookieValue = allCookies.split(name + "=")[1].split(";")[0];
+            return cookieValue;
+            }
+            return false;
+        },
+        logout(){
+            var date = new Date();
+            date.setTime(date.getTime() - (24*60*60*1000)); // expires in past
+            var expires = "expires="+ date.toUTCString();
+            document.cookie = "token=; " + expires;
+            window.location.href='login.html'
+        }
+        },
+    })
+</script>
