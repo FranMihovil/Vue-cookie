@@ -7,6 +7,8 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <script src="https://browser.sentry-cdn.com/5.15.4/bundle.min.js" integrity="sha384-fZlLkOI6v5j5D4eXc5f5j5l5Q5c5S5k5j5d5t5h5v5z" crossorigin="anonymous"></script>
+    <script type="module" src="main.js"></script>
 </head>
 <body>
     <div id="app">
@@ -88,6 +90,7 @@
 <script>
 
 
+
     var vueApp = new Vue({
         el:"#app",
         data:{
@@ -96,12 +99,16 @@
         },
         methods: {
         async register(){
+          try{
             let username = this.username
             let password = this.password
 
             const response = await fetch("https://www.fulek.com/data/api/user/register",{method:"POST",body:JSON.stringify({username,password}),headers: {'Content-Type': 'application/json'}})
             alert("Successfully registered !")
             window.location.href = 'login.html'
+          }catch(error){
+            this.$sentry.captureError(error)
+          }
         }
         },
     })
